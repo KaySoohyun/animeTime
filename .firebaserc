@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "musictime-7ae9d"
+  },
+  "targets": {
+    "musictime-7ae9d": {
+      "hosting": {
+        "animeTime": [
+          "musictime-7ae9d"
+        ]
+      }
+    }
+  }
+}

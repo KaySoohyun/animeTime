@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs-compat';
+import { map } from 'rxjs-compat/operators/map';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'animeTime';
+  
+  constructor() { 
+  }
 }
