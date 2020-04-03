@@ -2,37 +2,50 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
 import "firebase/storage";
 
+export interface Song {
+  name: string;
+  url: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.sass']
 })
+
 export class DashboardComponent implements OnInit {
+
+  playlists: Array<string> = ["animeflv", "beck", "kenshin", "newlist", "oldlist"]
+  selectedPlaylist: number = -1;
+  currentPlaylist: Array<Song> = [];
 
   constructor(public storage: AngularFireStorage) { }
 
-  ngOnInit() {
-    // this.storage.storage.ref("AnimeList")
-    // this.storage.storage.ref("Beck")
-    // this.storage.storage.ref("Kenshin")
-    // this.storage.storage.ref("Sueltos")
-    // this.storage.storage.ref("flv")
-    let storageRef = this.storage.storage.ref("AnimeList")
-    console.log(storageRef)
-    storageRef.listAll().then((result) => {
-      result.items.forEach((imageRef) => {
-        this.displayImage(imageRef);
+  ngOnInit() { }
+
+  onSelectPlaylist(i) {
+    this.selectedPlaylist = i;
+    this.getSongs()
+  }
+
+  getSongs() {
+    this.currentPlaylist.length = 0;
+    this.currentPlaylist = [];
+
+    let storageRef = this.storage.storage.ref(this.playlists[this.selectedPlaylist])
+    storageRef.listAll().then((playlist) => {
+      playlist.items.forEach((song) => {
+        song.getDownloadURL()
+          .then((url) => {
+            this.currentPlaylist.push({name:song.name, url: url})
+          })
+          .catch((error) => {
+            console.log("Something wrong")
+          })
       });
     })
   }
 
-    displayImage(imageRef) {
-    imageRef.getDownloadURL().then(function(url) {
-      console.log(url)
-    }).catch(function(error) {
-      // Handle any errors
-    });
-  }
 }
 
 
