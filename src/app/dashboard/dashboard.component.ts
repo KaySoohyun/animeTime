@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   playlists: Array<string> = ["animeflv", "beck", "kenshin", "newlist", "oldlist"]
   selectedPlaylist: number = -1;
   currentPlaylist: Array<Song> = [];
+  allPlaylist: Array<Array<Song>> = [[], [], [], [], []];
 
   constructor(public storage: AngularFireStorage) { }
 
@@ -25,7 +26,11 @@ export class DashboardComponent implements OnInit {
 
   onSelectPlaylist(i) {
     this.selectedPlaylist = i;
-    this.getSongs()
+    if (this.allPlaylist[this.selectedPlaylist].length > 0) {
+      this.currentPlaylist = this.allPlaylist[this.selectedPlaylist]
+    } else {
+      this.getSongs()
+    }
   }
 
   getSongs() {
@@ -38,6 +43,7 @@ export class DashboardComponent implements OnInit {
         song.getDownloadURL()
           .then((url) => {
             this.currentPlaylist.push({name:song.name, url: url})
+            this.allPlaylist[this.selectedPlaylist].push({name:song.name, url: url})
           })
           .catch((error) => {
             console.log("Something wrong")

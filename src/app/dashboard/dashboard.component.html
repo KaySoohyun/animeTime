@@ -1,11 +1,11 @@
-<div *ngFor="let names of playlists; index as i">
-  <button (click)="onSelectPlaylist(i)">{{names}}</button>
+<div class="playlist" *ngFor="let names of playlists; index as i">
+  <button (click)="onSelectPlaylist(i)" class="playlistNames pa1">{{names}}</button>
 </div>
 
 <div *ngIf="currentPlaylist.length > 0">
-  <div *ngFor="let song of currentPlaylist">
-    {{song.name}}
-    <audio controls>
+  <div *ngFor="let song of currentPlaylist" class="songs">
+    <p class="songsNames">{{song.name}}</p>
+    <audio>
       <source src="{{song.url}}">
     </audio>
   </div>
