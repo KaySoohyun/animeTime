@@ -6,6 +6,11 @@
 .playlistNames
   font-family: 'Sen', sans-serif
 
+.playlistNames:hover
+  font-size: larger
+  font-variant-caps: small-caps
+  font-weight: bold
+  
 .pa1
   padding: 1rem
 
@@ -20,4 +25,17 @@ button
   text-align: center
 
 .playlist
-  width: 50%
+  width: fit-content
+  border: 1px solid
+  border-radius: 4px
+  border-color: darkgray
+
+@media screen and (max-width: 800px)
+  .playlist
+    display: flex
+    flex-direction: column
+
+@media screen and (min-width: 801px)
+  .playlist 
+    display: flex
+    flex-direction: row
