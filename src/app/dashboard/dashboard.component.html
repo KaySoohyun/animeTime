@@ -1,13 +1,39 @@
 <div class="playlist">
   <div *ngFor="let names of playlists; index as i">
-    <button (click)="onSelectPlaylist(i)" class="playlistNames pa1">{{names}}</button>
+    <button *ngIf="i != clickedPlayslist" (click)="onSelectPlaylist(i)" class="playlistNames pa1">{{names}}</button>
+    <div *ngIf="i == clickedPlayslist">
+      <button class="controlButton pa1" (click)="playList()"><i class="ri-play-circle-fill"></i></button>
+      <button class="controlButton pa1" (click)="pauseList()"><i class="ri-pause-circle-fill"></i></button>
+      <button class="controlButton pa1" (click)="stopList()"><i class="ri-stop-circle-fill"></i></button>
+      <button class="controlButton pa1" (click)="shuffleList()"><i class="ri-shuffle-line"></i></button>
+      <button class="controlButton pa1" (click)="repeatList()"><i class="ri-repeat-2-line"></i></button>
+    </div>
   </div>
 </div>
-<div *ngIf="currentPlaylist.length > 0">
+
+<!-- <div *ngIf="currentPlaylist.length > 0">
   <div *ngFor="let song of currentPlaylist" class="songs">
     <p class="songsNames">{{song.name}}</p>
     <audio>
       <source src="{{song.url}}">
     </audio>
   </div>
-</div>
+</div> -->
+
+<i class="ri-home-heart-fill"></i>
+<i class="ri-send-plane-fill"></i>
+<i class="ri-github-fill"></i>
+<i class="ri-volume-down-fill"></i>
+<i class="ri-volume-mute-fill"></i>
+<i class="ri-volume-up-fill"></i>
+<i class="ri-play-circle-line"></i>
+<i class="ri-pause-circle-line"></i>
+<i class="ri-stop-circle-line"></i>
+<i class="ri-play-circle-fill"></i>
+<i class="ri-download-cloud-line"></i>
+<i class="ri-download-cloud-2-line"></i>
+<i class="ri-download-cloud-fill"></i>
+<i class="ri-refresh-line"></i>
+<i class="ri-user-star-line"></i>
+<i class="ri-user-heart-line"></i>
+<i class="ri-open-arm-line"></i>

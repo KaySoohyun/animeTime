@@ -19,13 +19,16 @@ export class DashboardComponent implements OnInit {
   selectedPlaylist: number = -1;
   currentPlaylist: Array<Song> = [];
   allPlaylist: Array<Array<Song>> = [[], [], [], [], []];
-
+  clickedPlayslist: number = -1;
   constructor(public storage: AngularFireStorage) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+
+  }
 
   onSelectPlaylist(i) {
     this.selectedPlaylist = i;
+    this.clickedPlayslist = i;
     if (this.allPlaylist[this.selectedPlaylist].length > 0) {
       this.currentPlaylist = this.allPlaylist[this.selectedPlaylist]
     } else {
@@ -50,6 +53,39 @@ export class DashboardComponent implements OnInit {
           })
       });
     })
+  }
+
+  playList() {
+    let index = 0;
+    while (index < this.allPlaylist[this.selectedPlaylist].length) {
+      var a = new Audio(this.allPlaylist[this.selectedPlaylist][index].url);
+      console.log("empieza")
+      
+      a.addEventListener('canplay', (event) => {
+        a.play();
+        console.log("empieza")
+      });
+      a.addEventListener('ended', (event) => {
+        console.log("termino", this.allPlaylist[this.selectedPlaylist][index].name)
+        index++;
+      });
+    }
+  }
+
+  pauseList() {
+    
+  }
+
+  stopList() {
+    
+  }
+
+  shuffleList() {
+    
+  }
+
+  repeatList() {
+    
   }
 
 }
