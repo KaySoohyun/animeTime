@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit {
   onSelectPlaylist(i) {
     this.selectedPlaylist = i;
     this.clickedPlayslist = i;
+    console.log(i)
     if (this.allPlaylist[this.selectedPlaylist].length > 0) {
       this.currentPlaylist = this.allPlaylist[this.selectedPlaylist]
     } else {
@@ -57,19 +58,30 @@ export class DashboardComponent implements OnInit {
 
   playList() {
     let index = 0;
-    while (index < this.allPlaylist[this.selectedPlaylist].length) {
-      var a = new Audio(this.allPlaylist[this.selectedPlaylist][index].url);
-      console.log("empieza")
-      
-      a.addEventListener('canplay', (event) => {
-        a.play();
-        console.log("empieza")
-      });
-      a.addEventListener('ended', (event) => {
-        console.log("termino", this.allPlaylist[this.selectedPlaylist][index].name)
-        index++;
-      });
-    }
+    console.log(index, this.allPlaylist[this.selectedPlaylist].length)
+    console.log(this.allPlaylist[this.selectedPlaylist][index])
+    this.playSong(index);
+  }
+
+  playSong(index) {
+    var a = new Audio(this.allPlaylist[this.selectedPlaylist][index].url);
+
+    console.log(index, a)
+
+    a.addEventListener('loadedmetadata', (event) => {
+      console.log("loadedmetadata", this.allPlaylist[this.selectedPlaylist][index].name)
+    });
+
+    a.addEventListener('canplay', (event) => {
+      console.log("canplay", this.allPlaylist[this.selectedPlaylist][index].name)
+      a.play();
+    });
+    
+    a.addEventListener('ended', (event) => {
+      console.log("termino", this.allPlaylist[this.selectedPlaylist][index].name)
+      index++
+      this.playSong(index);
+    });
   }
 
   pauseList() {
