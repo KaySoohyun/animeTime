@@ -5,6 +5,7 @@ import "firebase/storage";
 export interface Song {
   name: string;
   url: string;
+  song: any;
 }
 
 @Component({
@@ -46,8 +47,8 @@ export class DashboardComponent implements OnInit {
       playlist.items.forEach((song) => {
         song.getDownloadURL()
           .then((url) => {
-            this.currentPlaylist.push({name:song.name, url: url})
-            this.allPlaylist[this.selectedPlaylist].push({name:song.name, url: url})
+            this.currentPlaylist.push({name: song.name, url: url, song: null})
+            this.allPlaylist[this.selectedPlaylist].push({name:song.name, url: url, song: null})
           })
           .catch((error) => {
             console.log("Something wrong")
@@ -59,29 +60,45 @@ export class DashboardComponent implements OnInit {
   playList() {
     let index = 0;
     console.log(index, this.allPlaylist[this.selectedPlaylist].length)
-    console.log(this.allPlaylist[this.selectedPlaylist][index])
+    this.sortList();
     this.playSong(index);
   }
 
   playSong(index) {
-    var a = new Audio(this.allPlaylist[this.selectedPlaylist][index].url);
 
-    console.log(index, a)
+    if (!this.allPlaylist[this.selectedPlaylist][index].song) {
+      var a = new Audio(this.allPlaylist[this.selectedPlaylist][index].url);
+      this.allPlaylist[this.selectedPlaylist][index].song = a;
+    }
 
-    a.addEventListener('loadedmetadata', (event) => {
-      console.log("loadedmetadata", this.allPlaylist[this.selectedPlaylist][index].name)
-    });
+    console.log(index, this.allPlaylist[this.selectedPlaylist][index].song)
 
-    a.addEventListener('canplay', (event) => {
+    this.allPlaylist[this.selectedPlaylist][index].song.addEventListener('canplay', () => {
       console.log("canplay", this.allPlaylist[this.selectedPlaylist][index].name)
       a.play();
     });
     
-    a.addEventListener('ended', (event) => {
+    this.allPlaylist[this.selectedPlaylist][index].song.addEventListener('ended', () => {
       console.log("termino", this.allPlaylist[this.selectedPlaylist][index].name)
-      index++
-      this.playSong(index);
+      if (index < this.allPlaylist[this.selectedPlaylist].length) {
+        index++;
+        this.playSong(index);
+      }
     });
+  }
+
+  sortList() {
+    let indexList = this.playlists.findIndex((elem) => elem == 'oldlist');
+    if (indexList > -1) {
+      console.log(this.allPlaylist[indexList])
+      this.allPlaylist[indexList].sort((a, b) => {
+        if (a.name > b.name) return 1;
+        if (a.name < b.name) return -1;
+        return 0;
+      })
+      console.log(this.allPlaylist[indexList])
+    }
+    
   }
 
   pauseList() {
