@@ -21,11 +21,54 @@ export class DashboardComponent implements OnInit {
   currentPlaylist: Array<Song> = [];
   allPlaylist: Array<Array<Song>> = [[], [], [], [], []];
   clickedPlayslist: number = -1;
+
+  currentIndex: number = 0;
   constructor(public storage: AngularFireStorage) { }
 
   ngOnInit() { 
-
+    this.otra();
   }
+
+  otra(){
+    let downloadedImg;
+  //   let imageBox = document.querySelector(".imagebox");
+
+  // window.addEventListener("load", startup, false);
+
+  //   function startup() {
+  //     let buttonElement = document.getElementById("download");
+      
+  //     buttonElement.addEventListener("click", startDownload, false);
+  //   }
+
+    // function startDownload() {  
+      let imageURL = "https://cdn.glitch.com/4c9ebeb9-8b9a-4adc-ad0a-238d9ae00bb5%2Fmdn_logo-only_color.svg?1535749917189";
+      downloadedImg = new Image;
+      downloadedImg.crossOrigin = "Anonymous";
+      downloadedImg.addEventListener("load", imageReceived, false);
+      downloadedImg.src = imageURL;
+    // }
+
+    function imageReceived() {
+      let canvas = document.createElement("canvas");
+      let context = canvas.getContext("2d");
+      
+      canvas.width = downloadedImg.width;
+      canvas.height = downloadedImg.height;
+      
+      context.drawImage(downloadedImg, 0, 0);
+      // imageBox.appendChild(canvas);
+      
+      try {
+        console.log(canvas.toDataURL("image/png"))
+        localStorage.setItem("saved-image-example", canvas.toDataURL("image/png"));
+      }
+      catch(err) {
+        console.log("Error: " + err);
+      }  
+    }
+  }
+  
 
   onSelectPlaylist(i) {
     this.selectedPlaylist = i;
@@ -58,31 +101,31 @@ export class DashboardComponent implements OnInit {
   }
 
   playList() {
-    let index = 0;
-    console.log(index, this.allPlaylist[this.selectedPlaylist].length)
+    this.currentIndex = 0;
+    console.log(this.currentIndex, this.allPlaylist[this.selectedPlaylist].length)
     this.sortList();
-    this.playSong(index);
+    this.playSong();
   }
 
-  playSong(index) {
+  playSong() {
 
-    if (!this.allPlaylist[this.selectedPlaylist][index].song) {
-      var a = new Audio(this.allPlaylist[this.selectedPlaylist][index].url);
-      this.allPlaylist[this.selectedPlaylist][index].song = a;
+    if (!this.allPlaylist[this.selectedPlaylist][this.currentIndex].song) {
+      var a = new Audio(this.allPlaylist[this.selectedPlaylist][this.currentIndex].url);
+      this.allPlaylist[this.selectedPlaylist][this.currentIndex].song = a;
     }
 
-    console.log(index, this.allPlaylist[this.selectedPlaylist][index].song)
+    console.log(this.currentIndex, this.allPlaylist[this.selectedPlaylist][this.currentIndex].song)
 
-    this.allPlaylist[this.selectedPlaylist][index].song.addEventListener('canplay', () => {
-      console.log("canplay", this.allPlaylist[this.selectedPlaylist][index].name)
+    this.allPlaylist[this.selectedPlaylist][this.currentIndex].song.addEventListener('canplay', () => {
+      console.log("canplay", this.allPlaylist[this.selectedPlaylist][this.currentIndex].name)
       a.play();
     });
     
-    this.allPlaylist[this.selectedPlaylist][index].song.addEventListener('ended', () => {
-      console.log("termino", this.allPlaylist[this.selectedPlaylist][index].name)
-      if (index < this.allPlaylist[this.selectedPlaylist].length) {
-        index++;
-        this.playSong(index);
+    this.allPlaylist[this.selectedPlaylist][this.currentIndex].song.addEventListener('ended', () => {
+      console.log("termino", this.allPlaylist[this.selectedPlaylist][this.currentIndex].name)
+      if (this.currentIndex < this.allPlaylist[this.selectedPlaylist].length) {
+        this.currentIndex++;
+        this.playSong();
       }
     });
   }
@@ -102,7 +145,7 @@ export class DashboardComponent implements OnInit {
   }
 
   pauseList() {
-    
+    this.allPlaylist[this.selectedPlaylist][this.currentIndex].song.pause()
   }
 
   stopList() {
